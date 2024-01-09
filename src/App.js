@@ -1,13 +1,17 @@
 // import logo from './logo.svg';
 import './App.css';
-import { useState} from 'react';
+import { useState, useEffect } from 'react';
 
 function App() {     
 
-  const what = useState("joy");//it returns an array, whose first element is the present 
-  // state and the 2nd is the function is the state changing function
   // const [preState,stateChanger] = useState("joy");
-  console.log(what);
+  const what = useState("joy"); // see docs for notes
+  
+  
+  useEffect(() => {   
+    console.log(`it's ${what[0]} at the moment!`)
+  },[what[0]]);
+
   return (
     <div className="App">
       <h1>The subject is feeling {what[0]} today!</h1>
