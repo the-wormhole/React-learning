@@ -1,48 +1,31 @@
 // import logo from './logo.svg';
 import './App.css';
-import { useState, useEffect,useReducer } from 'react';
-
-function Checker(){
-
-  const [checked, setChecked] = useReducer(
-    checked => !checked,
-    false);
-    
-  return (
-    <div>
-      <input type="checkbox" value="checked" onChange={setChecked}/>
-      <label>
-        {checked ? "Checked" : "Not Checked"}
-      </label>
-    </div> 
-  )
-}
+import { useRef } from 'react';
 
 function App() {     
 
-  // const [preState,stateChanger] = useState("joy");
-  const what = useState("joy"); // see docs for notes
+  const textTitle = useRef();
+  const hexColor = useRef();
   
-  useEffect(() => {   
-    console.log(`it's ${what[0]} at the moment!`)
-  },[what[0]]);
+  const submit = (e) =>{
+    e.preventDefault();
+    console.log(textTitle);
+    alert(`${textTitle.current.value},${hexColor.current.value}`)
+    textTitle.current.value = "";
+    hexColor.current.value = "#000000";
+  }
 
   return (
-    <div className="App">
-      <h1>The subject is feeling {what[0]} today!</h1>
-      <button onClick = {() => {what[1]("anxious")}}>
-        anxious
-      </button>
-      <button onClick = {() => {what[1]("joy")}}>
-        joy
-      </button>
-      <button onClick = {() => {what[1]("lovely")}}>
-        lovely
-      </button>
+    <form onSubmit={submit}>
 
-      <Checker/>
-    </div>  
-
+      <input 
+      type="text" 
+      placeholder="Select color..."
+      ref={textTitle}
+      />
+      <input type="color" ref={hexColor}/>
+      <input type="submit" placeholder='Add'/>
+    </form>
   );
 }
 
