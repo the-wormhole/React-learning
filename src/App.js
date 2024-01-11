@@ -2,17 +2,29 @@
 import './App.css';
 import { useRef, useState } from 'react';
 
+function useInput(initialValue){
+
+  const [value,setValue] = useState(initialValue);
+  return [
+    {
+      value,
+      onChange:(e) => setValue(e.target.value)
+    },
+    () => setValue(initialValue)
+  ];
+}
+
 function App() {     
 
-  const [textTitle,setText] = useState("");
-  const [hexColor,setColor] = useState("#000000");
+  const [titleProps,resetText] = useInput("");
+  const [colorProps,resetColor] = useInput("#000000");
   
   const submit = (e) =>{
     e.preventDefault();
 
-    alert(`${textTitle},${hexColor}`)
-    setText("");
-    setColor("#000000");
+    alert(`${titleProps.value},${colorProps.value}`)
+    resetText("");
+    resetColor("#000000");
   }
 
   return (
@@ -21,10 +33,9 @@ function App() {
       <input 
       type="text" 
       placeholder="Select color..."
-      value={textTitle}
-      onChange={event => {setText(event.target.value)}}
+      {...titleProps}
       />
-      <input type="color" value={hexColor} onChange={event =>{setColor(event.target.value)}}/>
+      <input type="color" {...colorProps}/>
       <input type="submit" />
     </form>
   );
