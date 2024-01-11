@@ -14,7 +14,7 @@ function App() {
     textTitle.current.value = "";
     hexColor.current.value = "#000000";
   }
-
+  console.log("Test flag");
   return (
     <form onSubmit={submit}>
 
