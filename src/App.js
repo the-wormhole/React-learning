@@ -2,20 +2,30 @@
 import './App.css';
 import { useRef, useState, useEffect } from 'react';
 
+function DispUser({name,dp}){
+
+  return(
+    <div>
+      <p>{name}</p>
+      <img src = {dp} height = "150"/>
+    </div>
+  );
+
+}
 function App() {   
 
 const [data,setData] = useState(null);
+
 useEffect(() => {
-  //console.log("hey")
   fetch("https://api.github.com/users/the-wormhole")
   .then((res) => res.json())
   .then(setData);
 },[])
 
-if(data){                         // null and 2 in the code below are gping 
+if(data){                       
   return (
       <div>
-        <pre>{JSON.stringify(data,null,2)}</pre>
+          <DispUser name = {data.name} dp = {data.avatar_url}/>
       </div>
   );
 }
