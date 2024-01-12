@@ -1,44 +1,26 @@
 // import logo from './logo.svg';
 import './App.css';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 
-function useInput(initialValue){
+function App() {   
 
-  const [value,setValue] = useState(initialValue);
-  return [
-    {
-      value,
-      onChange:(e) => setValue(e.target.value)
-    },
-    () => setValue(initialValue)
-  ];
+const [data,setData] = useState(null);
+useEffect(() => {
+  //console.log("hey")
+  fetch("https://api.github.com/users/the-wormhole")
+  .then((res) => res.json())
+  .then(setData);
+},[])
+
+if(data){                         // null and 2 in the code below are gping 
+  return (
+      <div>
+        <pre>{JSON.stringify(data,null,2)}</pre>
+      </div>
+  );
 }
 
-function App() {     
-
-  const [titleProps,resetText] = useInput("");
-  const [colorProps,resetColor] = useInput("#000000");
-  
-  const submit = (e) =>{
-    e.preventDefault();
-
-    alert(`${titleProps.value},${colorProps.value}`)
-    resetText("");
-    resetColor("#000000");
-  }
-
-  return (
-    <form onSubmit={submit}>
-
-      <input 
-      type="text" 
-      placeholder="Select color..."
-      {...titleProps}
-      />
-      <input type="color" {...colorProps}/>
-      <input type="submit" />
-    </form>
-  );
+return <h1>No Data</h1>
 }
 
 export default App;
