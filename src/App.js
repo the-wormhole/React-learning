@@ -15,22 +15,34 @@ function DispUser({name,dp}){
 function App() {   
 
 const [data,setData] = useState(null);
+const [loading,setLoading] = useState(false);
+const [error,setError] = useState(null);
 
 useEffect(() => {
+
+  setLoading(true);
   fetch("https://api.github.com/users/the-wormhole")
   .then((res) => res.json())
-  .then(setData);
+  .then(setData)
+  .then(() => setLoading(false))
+  .catch(setError);
 },[])
 
-if(data){                       
+if(loading){
+  return(
+    <div>Loading....</div>
+  )
+}
+if(error){
+  <pre>{JSON.stringify(error,null,2)}</pre>
+}
+if(!data)return null;                      
   return (
       <div>
           <DispUser name = {data.name} dp = {data.avatar_url}/>
       </div>
   );
-}
 
-return <h1>No Data</h1>
 }
 
 export default App;
