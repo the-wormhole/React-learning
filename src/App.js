@@ -1,13 +1,31 @@
 // import logo from './logo.svg';
 import './App.css';
 import { useRef, useState, useEffect } from 'react';
+//import { query } from 'express';
 
-function DispUser({name,dp}){
+const Gquery = `
+query{
+  allLifts{
+    name
+    status
+    capacity
+    elevationGain
+  }
+}
+`;
+
+const opts = {
+  method: "POST",
+  headers: {"Content-Type":"application/json"},
+  body: JSON.stringify({Gquery})
+};
+
+function LiftsDisp({name,elevationGain,status,capacity}){
 
   return(
     <div>
-      <p>{name}</p>
-      <img src = {dp} height = "150"/>
+      <h1>{name}</h1>
+      <p>{elevationGain} {status} {capacity}</p>
     </div>
   );
 
@@ -21,25 +39,39 @@ const [error,setError] = useState(null);
 useEffect(() => {
 
   setLoading(true);
-  fetch("https://api.github.com/users/the-wormhole")
-  .then((res) => res.json())
+  fetch("https://snowtooth.moonhighway.com",opts)   // Fetch request is throwing an error
+  .then((res) => res.json())  //parses the body and generates 
   .then(setData)
   .then(() => setLoading(false))
-  .catch(setError);
+  .catch((err) => {
+    console.log(err);
+    setError(err);
+  });
 },[])
 
 if(loading){
   return(
-    <div>Loading....</div>
+    <h1>Loading....</h1>
   )
 }
 if(error){
-  <pre>{JSON.stringify(error,null,2)}</pre>
+
+  return(
+     <pre>{JSON.stringify(error)}</pre>
+    // <p>{error}</p>
+  );
 }
-if(!data)return null;                      
+if(!data)return null;
+console.log(data);
   return (
       <div>
-          <DispUser name = {data.name} dp = {data.avatar_url}/>
+          {data.data.allLifts.map((lift) => (
+            <LiftsDisp name = {lift.name} 
+            elevationGain = {lift.elevationGain} 
+            capacity = {lift.capacity}
+            status = {lift.status}
+            />
+          ))}
       </div>
   );
 
