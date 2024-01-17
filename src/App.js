@@ -18,7 +18,7 @@ function Home(){
 
 export function About(){
 
-    // Line 28 is for Nested links
+    // Line 28 is for Nested links to include all the child routes
   return(
     <div>
       <nav>
