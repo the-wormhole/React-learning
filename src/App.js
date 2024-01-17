@@ -26,6 +26,8 @@ export function About(){
         <Link to="/contact">Contact</Link>&nbsp;
       </nav>
       <h1>About</h1>
+      <Link to="history">History</Link>&nbsp;
+      <Link to="future">Future</Link>
       <Outlet/> 
     </div>
   )
