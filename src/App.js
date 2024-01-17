@@ -1,38 +1,72 @@
 // import logo from './logo.svg';
 import './App.css';
+import { Link, Outlet } from "react-router-dom";
 
-const contacts = [
-  {name:"Nayan", number:102323},
-  {name:"Anivesh", number:102323},
-  {name:"Anubhav", number:102323},
-  {name:"Antriksh", number:102323}
-]
+function Home(){
 
-function List({data,renderItem, renderEmpty}){
+  return(
+    <div>
+      <nav>
+        <Link to="/about">About</Link>&nbsp;
+        <Link to="/contact">Contact</Link>&nbsp;
+      </nav>
+      <h1>Website Home</h1>
+    </div>
+  )
 
-  return (!data.length)?renderEmpty:(
-    <ul>
-      {data.map((item) => (
-        <li key={item.name}>
-          {renderItem(item)}
-        </li>
-      ))}
-    </ul>
+}
+
+export function About(){
+
+    // Line 28 is for Nested links
+  return(
+    <div>
+      <nav>
+        <Link to="/">Home</Link>&nbsp;
+        <Link to="/contact">Contact</Link>&nbsp;
+      </nav>
+      <h1>About</h1>
+      <Outlet/> 
+    </div>
+  )
+
+}
+
+export function History(){
+
+  return(
+    <div>
+      <h1>Our History</h1>
+    </div>
   )
 }
 
-function App() {   
+export function Future(){
 
-  return (
-    <>
-      <h1>Contact List</h1>
-      <List 
-        data={contacts}
-        renderEmpty = "There is no data"
-        renderItem={(item) => <>{item.name} - {item.number} </>}
-      />
-    </>
-  );
+  return(
+    <div>
+      <h1>Future prospects</h1>
+    </div>
+  )
 }
 
-export default App;
+export function Contact(){
+
+  return(
+    <div>
+      <nav>
+        <Link to="/">Home</Link>&nbsp;
+        <Link to="/about">About</Link>&nbsp;
+      </nav>
+      <h1>Contact</h1>
+    </div>
+  )
+
+}
+
+export function App() {   
+
+  return <Home />;
+}
+
+//export default App;
