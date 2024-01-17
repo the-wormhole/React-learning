@@ -19,6 +19,8 @@ function Home(){
 export function About(){
 
     // Line 28 is for Nested links to include all the child routes
+    // the Link component added in line 30 - 31 will only work in this About component 
+    // definition and in no other 
   return(
     <div>
       <nav>
