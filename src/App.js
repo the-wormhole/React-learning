@@ -1,76 +1,89 @@
 // import logo from './logo.svg';
 import './App.css';
-import { Link, Outlet } from "react-router-dom";
+//import { Link, Outlet } from "react-router-dom";
+import {useEffect, useState} from 'react'
 
-function Home(){
+const Gquery = `
+query{
+	users{
+    name,
+    email
+  }
+}
+`;
+
+const opts = {
+  method:"POST",
+  headers:{"Content-Type":"application/json"},
+  body:JSON.stringify({ query:Gquery })
+};
+//elevationGain,status,capacity
+function LiftsDisp({name,email}){
 
   return(
     <div>
-      <nav>
-        <Link to="/about">About</Link>&nbsp;
-        <Link to="/contact">Contact</Link>&nbsp;
-      </nav>
-      <h1>Website Home</h1>
+      <h1>{name}:<small>{email}</small></h1>
+      {/* <p>{elevationGain} {status} {capacity}</p> */}
     </div>
-  )
+  );
 
 }
 
-export function About(){
+function App() {   
 
-    // Line 28 is for Nested links to include all the child routes
-    // the Link component added in line 30 - 31 will only work in this About component 
-    // definition and in no other 
+const [data,setData] = useState(null);
+const [loading,setLoading] = useState(false);
+const [error,setError] = useState(null);
+
+useEffect(() => {
+
+  async function makeRequest(){
+    setLoading(true);
+    try{
+    const res = await fetch("https://graphql-demo.mead.io/",opts);
+    //.then((res) => res.json())  //parses the body and generates javascript object from the response
+    var resJson = await res.json();
+
+    if(resJson.data){
+
+      console.log("Request successful!");
+      setData(resJson);
+      setLoading(false);
+
+    }
+    
+    }catch(err){
+      console.log(err);
+      setError(err);
+      return;
+    }
+  }
+  makeRequest();
+},[])
+
+if(loading){
   return(
-    <div>
-      <nav>
-        <Link to="/">Home</Link>&nbsp;
-        <Link to="/contact">Contact</Link>&nbsp;
-      </nav>
-      <h1>About</h1>
-      <Link to="history">History</Link>&nbsp;
-      <Link to="future">Future</Link>
-      <Outlet/> 
-    </div>
-  )
-
-}
-
-export function History(){
-
-  return(
-    <div>
-      <h1>Our History</h1>
-    </div>
+    <h1>Loading....</h1>
   )
 }
-
-export function Future(){
-
-  return(
-    <div>
-      <h1>Future prospects</h1>
-    </div>
-  )
-}
-
-export function Contact(){
+if(error){
 
   return(
-    <div>
-      <nav>
-        <Link to="/">Home</Link>&nbsp;
-        <Link to="/about">About</Link>&nbsp;
-      </nav>
-      <h1>Contact</h1>
-    </div>
-  )
+     <pre>{JSON.stringify(error)}</pre>
+  );
+}
+if(!data)return null;  
+
+  return (
+      <div>
+          {data.data.users.map((user) => (
+            <LiftsDisp name = {user.name} 
+            email = {user.email}
+            key={user.name}/>
+          ))}
+      </div>
+  );
 
 }
 
-export function App() {   
-
-  return <Home />;
-}
-
-//export default App;
+export default App;
